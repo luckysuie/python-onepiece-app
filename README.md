@@ -1,4 +1,5 @@
 ## File structure
+```bash
 .
 ├── Dockerfile
 ├── Jenkinsfile
@@ -23,3 +24,4 @@
 ├── requirements-dev.txt
 ├── requirements.txt
 └── uploads
+```
