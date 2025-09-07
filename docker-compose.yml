@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+mysql:
+image: mysql:8.4
+container_name: onepiece-mysql
+environment:
+MYSQL_DATABASE: onepiecedb
+MYSQL_USER: appuser
+MYSQL_PASSWORD: StrongPass
+3
+MYSQL_ROOT_PASSWORD: RootStrongPass
+ports:
+- "3306:3306"
+volumes:
+- mysql_data:/var/lib/mysql
+api:
+build: .
+container_name: onepiece-api
+env_file: .env
+depends_on:
+- mysql
+ports:
+- "8000:8000"
+volumes:
+- ./uploads:/app/uploads
+volumes:
+mysql_data:
+
