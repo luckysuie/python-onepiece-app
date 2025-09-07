@@ -1,15 +1,35 @@
+# app/database.py
+from typing import Generator
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
+
 from .config import settings
-engine = create_engine(settings.DB_URL, pool_pre_ping=True, future=True)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine,
-future=True)
+
+DB_URL = settings.DB_URL
+
+# Special connect args for SQLite only
+connect_args = {"check_same_thread": False} if DB_URL.startswith("sqlite") else {}
+
+# Create engine
+# pool_pre_ping=True helps avoid stale connections for MySQL/Postgres.
+engine = create_engine(
+    DB_URL,
+    pool_pre_ping=True,
+    connect_args=connect_args,
+)
+
+# Session factory
+SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
+
+# Base class for models
 Base = declarative_base()
-# Dependency for FastAPI routes
-from typing import Generator
+
+
+# FastAPI dependency
 def get_db() -> Generator:
-db = SessionLocal()
-try:
-yield db
-finally:
-db.close()
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+

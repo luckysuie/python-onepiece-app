@@ -1,0 +1,114 @@
+(.venv) LakshmiNarayana@lucky:~/python-onepiece-app$ history
+    1  sudo apt update
+    2  sudo apt install -y python3 python3-venv python3-pip git
+    3  git clone https://github.com/luckysuie/python-onepiece-app
+    4  ls
+    5  cd python-onepiece-app/
+    6  python 3 -m venv .venv
+    7  python3 -m venv .venv
+    8  source .venv/bin/activate
+    9  pip install --upgrade pip
+   10  pip install -r requirements.txt
+   11  cp -n .env.example .env || true
+   12  uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+   13  tree
+   14  suo apt install tree
+   15  sudo apt install tree
+   16  tree
+   17  cd app/
+   18  cat main.py
+   19  vi main.py
+   20  cat main.py
+   21  uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+   22  cd ..
+   23  uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+   24  tree
+   25  cd app/
+   26  cat database.py
+   27  cat config.py
+   28  vi config.py
+   29  vi database.py
+   30  cd
+   31  ls
+   32  cd python-onepiece-app/
+   33  cat .env.example
+   34  vi .env.example
+   35  sudo apt update && sudo apt install -y unixodbc-dev
+   36  uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+   37  cd app/
+   38  cat crud.py
+   39  cd ..
+   40  cd app/
+   41  vi crud.py
+   42  uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+   43  cd ..
+   44  uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+   45  pip install black
+   46  uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+   47  cd app/
+   48  cat models.py
+   49  vi models.py
+   50  cd ..
+   51  uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+   52  cd app/
+   53  cat utils.py
+   54  cd ..
+   55  cd app/
+   56  vi utils.py
+   57  cd .
+   58  cd ..
+   59  pip install "passlib[bcrypt]"
+   60  uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+   61  cat .env.example
+   62  vi .env.example
+   63* uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+   64  cd app/
+   65  cat _init_
+   66  tree
+   67  # Show both
+   68  grep -n DB_URL .env .env.example
+   69  cd ..
+   70  # Show both
+   71  grep -n DB_URL .env .env.example
+   72  sed -i 's|^DB_URL=.*$|DB_URL="mssql+pyodbc://LakshmiNarayana:Lakshmi%40123456789@onepieceserver.database.windows.net:1433/luckydb?driver=ODBC+Driver+18+for+SQL+Server&Encrypt=yes&TrustServerCertificate=no"|' .env
+   73  grep -n DB_URL .env .env.example
+   74  cd app/ cd
+   75  cat > .env <<'EOF'
+DB_URL="mssql+pyodbc://LakshmiNarayana:Lakshmi%40123456789@onepieceserver.database.windows.net:1433/luckydb?driver=ODBC+Driver+18+for+SQL+Server&Encrypt=yes&TrustServerCertificate=no"
+UPLOAD_DIR="uploads"
+APP_TITLE="One Piece Registration (FastAPI)"
+APP_DEBUG="true"
+EOF
+
+   76  grep -n DB_URL .env
+   77  uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+   78  pip install pyodbc
+   79  # Add Microsoft repo
+   80  sudo wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+   81  sudo dpkg -i packages-microsoft-prod.deb
+   82  sudo apt-get update
+   83  # Install ODBC Driver 18 for SQL Server
+   84  sudo ACCEPT_EULA=Y apt-get install -y msodbcsql18
+   85  sudo apt-get install -y unixodbc-dev build-essential python3-dev
+   86  pip install --no-cache-dir pyodbc
+   87  # Quick test (uses DB_URL from your .env)
+   88  python - <<'PY'
+import os, sqlalchemy as sa
+print("DB_URL starts with:", os.getenv("DB_URL")[:40], "…")
+engine = sa.create_engine(os.getenv("DB_URL"))
+with engine.connect() as c:
+    print("Connected OK:", c.execute(sa.text("SELECT GETDATE()")).scalar())
+PY
+
+   89  # If OK, start the app
+   90  uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+   91  tree
+   92  cd app
+   93  ls
+   94  mkdir static
+   95  cd static/
+   96  touch .gitkeep
+   97  ls
+   98  cd ..
+   99  uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+  100  history
