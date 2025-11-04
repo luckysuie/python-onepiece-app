@@ -3,7 +3,7 @@ pipeline{
     stages{
         stage("Git checkout"){
             steps{
-                echo "Cloning the Python project source code from the GitHub repository"
+                echo "Cloniing the Python project source code from the GitHub repository"
                 git branch: 'main', url: 'https://github.com/luckysuie/python-onepiece-app'
             }
         }
