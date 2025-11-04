@@ -42,9 +42,10 @@ pipeline{
         stage("Login to Azure"){
             steps{
                 echo "Logging into Azure"
-                withCredentials([usernamePassword(credentialsId: 'aazure-sp', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')]),
+                withCredentials([
+                    usernamePassword(credentialsId: 'aazure-sp', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD'),
                     string(credentialsId: 'azure-tenant', variable: 'AZURE_TENANT')
-                {
+                ]){
                     sh '''
                     az login --service-principal -u $AZURE_USERNAME -p $AZURE_PASSWORD --tenant $AZURE_TENANT
                     '''
