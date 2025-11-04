@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: luckywebapp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: luckywebapp
+  template:
+    metadata:
+      labels:
+        app: luckywebapp
+    spec:
+      containers:
+        - name: luckywebapp
+          image: dockerhub_username/reponame:latest   # replace with your public Docker Hub image
+          ports:
+            - containerPort: 8080
+          env:
+            - name: PORT
+              value: "8080"
+
