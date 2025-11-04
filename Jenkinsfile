@@ -17,7 +17,7 @@ pipeline{
                 '''
             }
         }
-        stage("Python test"){   
+        stage("Python test"){
             steps{
                 echo "Running tests for the Python application"
                 sh '''
@@ -25,14 +25,15 @@ pipeline{
                 pytest app/tests/test_app.py
                 '''
             }
+        }
         stage("Docker build and push"){
             steps{
                 echo "Building and Pushing the Docker image to Docker Hub"
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]){
                     sh '''
                     echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
-                    docker build -t luckysuie/python-onepiece-app:latest .
-                    docker push luckysuie/python-onepiece-app:latest
+                    docker build -t lucky1856/python-onepiece-app:latest .
+                    docker push lucky1856/python-onepiece-app:latest
                     '''
                 }
             }
