@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: luckywebapp
-          image: dockerhub_username/reponame:latest   # replace with your public Docker Hub image
+          image: lucky1856/python-onepiece-app   # replace with your public Docker Hub image
           ports:
             - containerPort: 8080
           env:
