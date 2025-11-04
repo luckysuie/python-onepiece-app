@@ -7,7 +7,7 @@ pipeline{
                 git branch: 'main', url: 'https://github.com/luckysuie/python-onepiece-app'
             }
         }
-        stage("pythonn build"){
+        stage("pythonn buuild"){
             steps{
                 echo "Building the Python application"
                 sh '''
