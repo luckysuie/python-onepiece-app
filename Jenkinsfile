@@ -34,7 +34,7 @@ pipeline {
             environment { SONARQUBE_SCANNER_HOME = tool 'sonar-scanner' }
             steps {
                 echo "Running SonarQube scan for code quality analysis"
-                withSonarQubeEnv('sonar-local') {
+                withSonarQubeEnv('sonarqube-local') {
                     sh '''
                     . venv/bin/activate
                     $SONARQUBE_SCANNER_HOME/bin/sonar-scanner \
@@ -49,7 +49,7 @@ pipeline {
             environment { SONARQUBE_SCANNER_HOME = tool 'sonar-scanner' }
             steps {
                 echo "Re-running SonarQube scan for code quality analysis"
-                withSonarQubeEnv('sonar-local') {
+                withSonarQubeEnv('sonarqube-local') {
                     sh '''
                     . venv/bin/activate
                     $SONARQUBE_SCANNER_HOME/bin/sonar-scanner \
