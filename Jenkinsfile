@@ -108,7 +108,7 @@ pipeline {
         //     steps{
         //         echo "Deploying the Docker image to Azure Kubernetes Service (AKS)"
         //         sh '''
-        //         az aks get-credentials --resource-group lucky --name myAKSCluster
+        //         az aks get-credentials --resource-group lucky --name lucky-aks-cluster11
         //         kubectl apply -f K8s/deployment.yaml
         //         kubectl apply -f K8s/service.yaml
         //         kubectl get all
