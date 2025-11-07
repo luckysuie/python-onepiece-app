@@ -1,14 +1,15 @@
-pipeline{
+pipeline {
     agent any
-    stages{
-        stage("Git checkout"){
-            steps{
+    stages {
+        stage("Git checkout") {
+            steps {
                 echo "Cloniing the Pythonn project source code from the GitHub repository"
                 git branch: 'main', url: 'https://github.com/luckysuie/python-onepiece-app'
             }
         }
-        stage("pythonn buuild"){
-            steps{
+
+        stage("pythonn buuild") {
+            steps {
                 echo "Building the Python application"
                 sh '''
                 rm -rf venv # Remove existing virtual environment if any
@@ -18,8 +19,9 @@ pipeline{
                 '''
             }
         }
-        stage("Python test"){
-            steps{
+
+        stage("Python test") {
+            steps {
                 echo "Running tests for the Python application"
                 sh '''
                 . venv/bin/activate
@@ -27,11 +29,12 @@ pipeline{
                 '''
             }
         }
-        stage("sonarQube scan"){
-            environment { SONARQUBE_SCANNER_HOME = tool 'sonar-Scanner' }
-            steps{
+
+        stage("sonarQube scan") {
+            environment { SONARQUBE_SCANNER_HOME = tool 'sonar-scanner' }
+            steps {
                 echo "Running SonarQube scan for code quality analysis"
-                withSonarQubeEnv('sonar-local'){
+                withSonarQubeEnv('sonar-local') {
                     sh '''
                     . venv/bin/activate
                     $SONARQUBE_SCANNER_HOME/bin/sonar-scanner \
@@ -39,13 +42,14 @@ pipeline{
                     -Dsonar.sources=. \
                     '''
                 }
+            }
         }
-        stage("publish sonarQube quality gate"){
-            environment { SONARQUBE_SCANNER_HOME = tool 'sonar-Scanner' }
-            e
-            steps{
+
+        stage("publish sonarQube quality gate") {
+            environment { SONARQUBE_SCANNER_HOME = tool 'sonar-scanner' }
+            steps {
                 echo "Re-running SonarQube scan for code quality analysis"
-                withSonarQubeEnv('sonar-local'){
+                withSonarQubeEnv('sonar-local') {
                     sh '''
                     . venv/bin/activate
                     $SONARQUBE_SCANNER_HOME/bin/sonar-scanner \
@@ -53,15 +57,14 @@ pipeline{
                     -Dsonar.sources=. \
                     -Dsonarqualitygate.wait=false
                     '''
-
                 }
             }
         }
-        }
-        stage("Docker build and push"){
-            steps{
+
+        stage("Docker build and push") {
+            steps {
                 echo "Building and Pushing the Docker image to Docker Hub"
-                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]){
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
                     sh '''
                     echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
                     docker build -t lucky1856/python-onepiece-app:latest .
@@ -70,8 +73,9 @@ pipeline{
                 }
             }
         }
-        stage("Trivy security scan"){
-            steps{
+
+        stage("Trivy security scan") {
+            steps {
                 echo "Performing security scan using Trivy"
                 sh '''
                 trivy image --format table --severity HIGH,CRITICAL \
@@ -84,6 +88,9 @@ pipeline{
                 }
             }
         }
+    }
+}
+
         // stage("Login to Azure"){
         //     steps{
         //         echo "Logging into Azure"
@@ -108,5 +115,3 @@ pipeline{
         //         '''
         //     }
         // }
-    }
-}
