@@ -27,6 +27,37 @@ pipeline{
                 '''
             }
         }
+        stage("sonarQube scan"){
+            environment { SONARQUBE_SCANNER_HOME = tool 'sonar-Scanner' }
+            steps{
+                echo "Running SonarQube scan for code quality analysis"
+                withSonarQubeEnv('sonar-local'){
+                    sh '''
+                    . venv/bin/activate
+                    $SONARQUBE_SCANNER_HOME/bin/sonar-scanner \
+                    -Dsonar.projectKey= jenkins1234 \
+                    -Dsonar.sources=. \
+                    '''
+                }
+        }
+        stage("publish sonarQube quality gate"){
+            environment { SONARQUBE_SCANNER_HOME = tool 'sonar-Scanner' }
+            e
+            steps{
+                echo "Re-running SonarQube scan for code quality analysis"
+                withSonarQubeEnv('sonar-local'){
+                    sh '''
+                    . venv/bin/activate
+                    $SONARQUBE_SCANNER_HOME/bin/sonar-scanner \
+                    -Dsonar.projectKey= jenkins1234 \
+                    -Dsonar.sources=. \
+                    -Dsonarqualitygate.wait=false
+                    '''
+
+                }
+            }
+        }
+        }
         stage("Docker build and push"){
             steps{
                 echo "Building and Pushing the Docker image to Docker Hub"
@@ -39,29 +70,43 @@ pipeline{
                 }
             }
         }
-        stage("Login to Azure"){
+        stage("Trivy security scan"){
             steps{
-                echo "Logging into Azure"
-                withCredentials([
-                    usernamePassword(credentialsId: 'azure-sp', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD'),
-                    string(credentialsId: 'azure-tenant', variable: 'AZURE_TENANT')
-                ]){
-                    sh '''
-                    az login --service-principal -u $AZURE_USERNAME -p $AZURE_PASSWORD --tenant $AZURE_TENANT
-                    '''
+                echo "Performing security scan using Trivy"
+                sh '''
+                trivy image --format table --severity HIGH,CRITICAL \
+                --output trivy-report.txt lucky1856/python-onepiece-app:latest
+                '''
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'trivy-report.txt'
                 }
             }
         }
-        stage("Deploy to azure kubernetes service"){
-            steps{
-                echo "Deploying the Docker image to Azure Kubernetes Service (AKS)"
-                sh '''
-                az aks get-credentials --resource-group lucky --name myAKSCluster
-                kubectl apply -f K8s/deployment.yaml
-                kubectl apply -f K8s/service.yaml
-                kubectl get all
-                '''
-            }
-        }
+        // stage("Login to Azure"){
+        //     steps{
+        //         echo "Logging into Azure"
+        //         withCredentials([
+        //             usernamePassword(credentialsId: 'azure-sp', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD'),
+        //             string(credentialsId: 'azure-tenant', variable: 'AZURE_TENANT')
+        //         ]){
+        //             sh '''
+        //             az login --service-principal -u $AZURE_USERNAME -p $AZURE_PASSWORD --tenant $AZURE_TENANT
+        //             '''
+        //         }
+        //     }
+        // }
+        // stage("Deploy to azure kubernetes service"){
+        //     steps{
+        //         echo "Deploying the Docker image to Azure Kubernetes Service (AKS)"
+        //         sh '''
+        //         az aks get-credentials --resource-group lucky --name myAKSCluster
+        //         kubectl apply -f K8s/deployment.yaml
+        //         kubectl apply -f K8s/service.yaml
+        //         kubectl get all
+        //         '''
+        //     }
+        // }
     }
 }
