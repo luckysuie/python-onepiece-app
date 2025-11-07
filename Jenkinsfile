@@ -38,7 +38,7 @@ pipeline {
                     sh '''
                     . venv/bin/activate
                     $SONARQUBE_SCANNER_HOME/bin/sonar-scanner \
-                    -Dsonar.projectKey= jenkins1234 \
+                    -Dsonar.projectKey=jenkins1234 \
                     -Dsonar.sources=. \
                     '''
                 }
